@@ -1,18 +1,26 @@
 package main
 
 import (
+	"html/template"
 	"log/slog"
-	"net/http"
+	"os"
 
+	"github.com/dilithaw123/go-example-project/internal/http"
 	"github.com/dilithaw123/go-example-project/internal/user"
 )
 
 func main() {
-	logger := slog.Default()
-	userHandlerEnv := user.NewUserHandlerEnv(user.NewMongoUserService(), logger)
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /user", userHandlerEnv.GetUserByID)
-	mux.Handle("GET /", http.FileServer(http.Dir("./static")))
-	http.ListenAndServe(":8080", mux)
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	templates, err := template.ParseGlob("templates/*.html")
+	if err != nil {
+		logger.Error("Error parsing templates", "error", err)
+		return
+	}
+	handlerEnv := http.HandlerEnv{
+		UserService: user.NewMongoUserService(logger),
+		Logger:      logger,
+		Templates:   templates,
+	}
+	port := ":8080"
+	handlerEnv.StartServer(port)
 }

@@ -3,6 +3,7 @@
 
 <head>
 	<title>Example</title>
+	<script src="/scripts/htmx.min.js"></script>
 </head>
 
 <body>
@@ -11,6 +12,8 @@
 		<a href="/pages/example.html">Example</a>
 	</nav>
 	<h1>Example</h1>
+	<div id="users" hx-get="/users" hx-trigger="load" hx-target="#users" hx-swap="outerHTML">
+	</div>
 </body>
 
 

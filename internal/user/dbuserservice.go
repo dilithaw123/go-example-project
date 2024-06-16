@@ -23,3 +23,12 @@ func (s *DBUserService) GetUserByID(ctx context.Context, id int) (*User, error) 
 	}
 	return &user, nil
 }
+
+func (s *DBUserService) GetUsers(ctx context.Context) ([]User, error) {
+	var users []User
+	err := sqlscan.Select(ctx, s.db, &users, "SELECT * FROM users")
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
