@@ -1,5 +1,7 @@
 package user
 
+import "fmt"
+
 type User struct {
 	ID   int
 	Name string
@@ -7,5 +9,5 @@ type User struct {
 }
 
 func (u User) String() string {
-	return u.Name
+	return fmt.Sprintf("{ID: %d, Name: %s, Age: %d}", u.ID, u.Name, u.Age)
 }
